@@ -1,0 +1,179 @@
+"use client";
+
+import { motion } from "motion/react";
+import { MdLocationPin } from "react-icons/md";
+
+import BlackPillButton from "@/components/BlackPillButton";
+import SpeakerCard from "@/components/main-event/SpeakerCard";
+import PhotoCarousel from "@/components/main-event/PhotoCarousel";
+import TimelineSchedule from "@/components/main-event/TimelineSchedule";
+import TicketPlaceholder from "@/components/main-event/TicketPlaceholder";
+import { EVENT_DATES, EVENT_SPEAKERS, EVENT_SCHEDULE } from "@/lib/config";
+
+export default function MainEventSection() {
+	return (
+		<motion.section id="main-event">
+			{/* Hero Block */}
+			<section
+				className="relative overflow-hidden px-4 pb-14 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-18 lg:pt-24 bg-cover bg-center bg-no-repeat"
+				style={{ backgroundImage: "url('/gdg-hero-background.png')" }}
+			>
+				<motion.div
+					className="mx-auto flex w-full max-w-4xl flex-col items-center text-center"
+					initial={{ opacity: 0, y: 24 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: false, amount: 0.4 }}
+					transition={{ duration: 0.6, ease: "easeOut" }}
+				>
+					<motion.p
+						className="font-openSans text-xs font-medium text-black/80 sm:text-sm"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.65, delay: 0.1 }}
+					>
+						GDG OAU × Build with AI 2026
+					</motion.p>
+					<motion.h1
+						className="mt-5 text-5xl font-bold leading-[1.04] text-black sm:text-6xl lg:text-7xl"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.65, delay: 0.18 }}
+					>
+						{EVENT_DATES.mainEvent}
+					</motion.h1>
+					<motion.p
+						className="mt-4 max-w-2xl leading-7 text-black/90 sm:text-lg"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.65, delay: 0.26 }}
+					>
+						Obafemi Awolowo University{" "}
+						<MdLocationPin className="inline" />
+					</motion.p>
+					<motion.p
+						className="mt-2 text-sm text-black/75"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.65, delay: 0.34 }}
+					>
+						Theme: Build. Shift. Scale
+					</motion.p>
+					<motion.div
+						className="mt-8 flex flex-wrap items-center justify-center gap-3"
+						initial={{ opacity: 0, y: 18 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.65, delay: 0.42 }}
+					>
+						<BlackPillButton
+							label="Register Now"
+							href="#register"
+							// Kept the button dark to contrast well against the new light background
+							className="bg-black text-white hover:bg-black/90"
+						/>
+					</motion.div>
+				</motion.div>
+			</section>
+			{/* Day Schedule */}
+			<section className="px-4 py-16 sm:px-6 lg:px-8">
+				<motion.div className="mx-auto max-w-5xl">
+					<motion.h2
+						className="mb-16 flex items-center justify-center gap-3 text-center text-3xl font-bold text-ink sm:text-4xl"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false, amount: 0.4 }}
+						transition={{ duration: 0.6 }}
+					>
+						Schedule
+						<img
+							src="/branding.png"
+							alt="GDG Branding"
+							className="h-8 w-auto"
+						/>
+					</motion.h2>
+					<TimelineSchedule events={EVENT_SCHEDULE} />
+				</motion.div>
+			</section>
+			{/* Speakers Grid */}
+			<section className="px-4 py-16 sm:px-6 lg:px-8">
+				<div className="mx-auto max-w-6xl">
+					<motion.h2
+						className="mb-12 text-center text-3xl font-bold text-ink sm:text-4xl"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false, amount: 0.4 }}
+						transition={{ duration: 0.6 }}
+					>
+						Speakers{" "}
+						<img
+							src="/branding.png"
+							alt="GDG Branding"
+							className="inline h-8 w-auto ml-2"
+						/>
+					</motion.h2>
+
+					<div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 justify-items-center">
+						{EVENT_SPEAKERS.map((speaker, index) => (
+							<SpeakerCard
+								key={index}
+								index={index}
+								speaker={speaker}
+							/>
+						))}
+					</div>
+				</div>
+			</section>
+
+			{/* Photo Gallery */}
+			<section className="px-4 py-16 sm:px-6 lg:px-8">
+				<motion.div className="mx-auto max-w-6xl">
+					<motion.h2
+						className="mb-6 flex items-center justify-center text-center text-3xl font-bold text-ink sm:text-4xl"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false, amount: 0.4 }}
+						transition={{ duration: 0.6 }}
+					>
+						Gallery{" "}
+						<img
+							src="/branding.png"
+							alt="GDG Branding"
+							className="ml-3 inline h-8 w-auto"
+						/>
+					</motion.h2>
+
+					{/* Render the extracted interactive component */}
+					<PhotoCarousel />
+				</motion.div>
+			</section>
+
+			{/* Register CTA */}
+			<section id="register" className="px-4 py-16 sm:px-6 lg:px-8">
+				<div className="mx-auto max-w-4xl text-center">
+					<motion.div
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false, amount: 0.4 }}
+						transition={{ duration: 0.6 }}
+						className="flex flex-col items-center"
+					>
+						<p className="max-w-2xl text-lg leading-8 text-ink/70">
+							Join hundreds of developers, designers, and AI
+							enthusiasts for a day of hands-on workshops, expert
+							talks, and networking.
+						</p>
+
+						<TicketPlaceholder />
+
+						{/* The existing button */}
+						<div className="mt-10">
+							<BlackPillButton
+								label="Claim Your Ticket"
+								href="https://gdg.community.dev/events/details/google-gdg-on-campus-obafemi-awolowo-university-ife-nigeria-presents-build-with-ai-oau-build-shift-scale/"
+							/>
+						</div>
+					</motion.div>
+				</div>
+			</section>
+		</motion.section>
+	);
+}

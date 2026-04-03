@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model WhatWasBuiltConfig {
+  id                Int                   @id @default(1)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  publicFormEnabled Boolean               @default(false)
+  projects          WhatWasBuiltProject[]
+}
+
+model WhatWasBuiltProject {
+  id           Int                @id @default(autoincrement())
+  displayOrder Int                @default(0)
+  community    String
+  tags         String[]
+  name         String
+  description  String
+  techTags     String[]
+  demoHref     String
+  likes        Int                @default(0)
+  category     String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  configId     Int                @default(1)
+  config       WhatWasBuiltConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  likesByDevice WhatWasBuiltProjectLike[]
+
+  @@index([configId, displayOrder])
+}
+
+model WhatWasBuiltProjectLike {
+  id        Int                 @id @default(autoincrement())
+  projectId Int
+  deviceId  String
+  createdAt DateTime            @default(now())
+  project   WhatWasBuiltProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, deviceId])
+  @@index([deviceId])
+}
+
+model ScheduleConfig {
+  id        Int             @id @default(1)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  events    ScheduleEvent[]
+}
+
+model ScheduleEvent {
+  id          Int            @id @default(autoincrement())
+  displayOrder Int           @default(0)
+  date        String
+  title       String
+  summary     String
+  track       String
+  sessionType String
+  time        String
+  location    String
+  ticketHref  String         @default("#")
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  configId    Int            @default(1)
+  config      ScheduleConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+
+  @@index([configId, displayOrder])
+}
