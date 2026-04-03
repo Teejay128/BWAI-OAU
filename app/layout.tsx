@@ -15,8 +15,76 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Build With AI",
-	description: "2026 GDG OAU Build With AI Event",
+	title: {
+		default: "Build With AI 2026 | GDG OAU",
+		template: "%s | Build With AI 2026",
+	},
+	description:
+		"Join the 2026 Build With AI event by Google Developer Group OAU. Explore AI innovation, meet inspiring speakers, and build amazing projects with cutting-edge AI technologies.",
+	keywords: [
+		"Build With AI",
+		"GDG OAU",
+		"Google Developer Group",
+		"AI Event",
+		"Technology",
+		"Innovation",
+		"2026",
+	],
+	authors: [{ name: "Google Developer Group OAU" }],
+	creator: "GDG OAU",
+	publisher: "Google Developer Group OAU",
+	robots: {
+		index: true,
+		follow: true,
+	},
+	openGraph: {
+		type: "website",
+		locale: "en_US",
+		url: "https://buildwithai.gdgoau.com",
+		siteName: "Build With AI 2026",
+		title: "Build With AI 2026 | GDG OAU",
+		description:
+			"Join the 2026 Build With AI event by Google Developer Group OAU. Explore AI innovation, meet inspiring speakers, and build amazing projects.",
+		images: [
+			{
+				url: "/branding.png",
+				width: 1200,
+				height: 630,
+				alt: "Build With AI 2026 Event",
+				type: "image/png",
+			},
+			{
+				url: "/branding.png",
+				width: 800,
+				height: 600,
+				alt: "Build With AI 2026 Event",
+				type: "image/png",
+			},
+		],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Build With AI 2026 | GDG OAU",
+		description:
+			"Join the 2026 Build With AI event by Google Developer Group OAU.",
+		images: ["/branding.png"],
+		creator: "@gdgoau",
+	},
+	viewport: {
+		width: "device-width",
+		initialScale: 1,
+		maximumScale: 5,
+	},
+	icons: {
+		icon: "/gdg-oau-logo.svg",
+		apple: "/gdg-oau-logo.svg",
+	},
+	manifest: "/site.webmanifest",
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: "black-translucent",
+		title: "Build With AI 2026",
+	},
 };
 
 export default function RootLayout({
