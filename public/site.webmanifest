@@ -10,33 +10,33 @@
   "theme_color": "#6366f1",
   "icons": [
     {
-      "src": "/gdg-oau-logo.svg",
+      "src": "/icon.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/gdg-oau-logo.svg",
+      "src": "/icon.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/gdg-oau-logo.svg",
+      "src": "/icon.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "/branding.png",
+      "src": "/icon.png",
       "type": "image/png",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "/branding.png",
+      "src": "/icon.png",
       "type": "image/png",
       "sizes": "1280x720",
       "form_factor": "wide"
@@ -51,9 +51,9 @@
       "url": "/schedule",
       "icons": [
         {
-          "src": "/gdg-oau-logo.svg",
+          "src": "/icon.png",
           "sizes": "192x192",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     },
@@ -64,9 +64,9 @@
       "url": "/what-was-built",
       "icons": [
         {
-          "src": "/gdg-oau-logo.svg",
+          "src": "/icon.png",
           "sizes": "192x192",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     }

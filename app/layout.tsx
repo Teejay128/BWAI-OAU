@@ -40,21 +40,21 @@ export const metadata: Metadata = {
 	openGraph: {
 		type: "website",
 		locale: "en_US",
-		url: "https://buildwithai.gdgoau.com",
+		url: "https://bwaioau.site",
 		siteName: "Build With AI 2026",
 		title: "Build With AI 2026 | GDG OAU",
 		description:
 			"Join the 2026 Build With AI event by Google Developer Group OAU. Explore AI innovation, meet inspiring speakers, and build amazing projects.",
 		images: [
 			{
-				url: "/branding.png",
+				url: "/icon.png",
 				width: 1200,
 				height: 630,
 				alt: "Build With AI 2026 Event",
 				type: "image/png",
 			},
 			{
-				url: "/branding.png",
+				url: "/icon.png",
 				width: 800,
 				height: 600,
 				alt: "Build With AI 2026 Event",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 		title: "Build With AI 2026 | GDG OAU",
 		description:
 			"Join the 2026 Build With AI event by Google Developer Group OAU.",
-		images: ["/branding.png"],
+		images: ["/icon.png"],
 		creator: "@gdgoau",
 	},
 	viewport: {
@@ -76,8 +76,8 @@ export const metadata: Metadata = {
 		maximumScale: 5,
 	},
 	icons: {
-		icon: "/gdg-oau-logo.svg",
-		apple: "/gdg-oau-logo.svg",
+		icon: "/icon.svg",
+		apple: "/icon.svg",
 	},
 	manifest: "/site.webmanifest",
 	appleWebApp: {
