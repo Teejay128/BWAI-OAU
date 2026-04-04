@@ -54,11 +54,11 @@ export const metadata: Metadata = {
 			// 	type: "image/svg+xml",
 			// },
 			{
-				url: "/gdg-oau-logo.svg",
+				url: "/gdg-oau-logo.png",
 				width: 800,
 				height: 600,
 				alt: "Build With AI 2026 Event",
-				type: "image/svg+xml",
+				type: "image/png",
 			},
 		],
 	},
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 		title: "Build With AI 2026 | GDG OAU",
 		description:
 			"Join the 2026 Build With AI event by Google Developer Group OAU.",
-		images: ["/gdg-oau-logo.svg"],
+		images: ["/gdg-oau-logo.png"],
 		creator: "@gdgoau",
 	},
 	viewport: {
