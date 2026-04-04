@@ -46,19 +46,19 @@ export const metadata: Metadata = {
 		description:
 			"Join the 2026 Build With AI event by Google Developer Group OAU. Explore AI innovation, meet inspiring speakers, and build amazing projects.",
 		images: [
+			// {
+			// 	url: "/gdg-oau-logo.svg",
+			// 	width: 1200,
+			// 	height: 630,
+			// 	alt: "Build With AI 2026 Event",
+			// 	type: "image/svg+xml",
+			// },
 			{
-				url: "/icon.png",
-				width: 1200,
-				height: 630,
-				alt: "Build With AI 2026 Event",
-				type: "image/png",
-			},
-			{
-				url: "/icon.png",
+				url: "/gdg-oau-logo.svg",
 				width: 800,
 				height: 600,
 				alt: "Build With AI 2026 Event",
-				type: "image/png",
+				type: "image/svg+xml",
 			},
 		],
 	},
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 		title: "Build With AI 2026 | GDG OAU",
 		description:
 			"Join the 2026 Build With AI event by Google Developer Group OAU.",
-		images: ["/icon.png"],
+		images: ["/gdg-oau-logo.svg"],
 		creator: "@gdgoau",
 	},
 	viewport: {
