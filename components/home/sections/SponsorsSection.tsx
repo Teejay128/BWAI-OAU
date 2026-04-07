@@ -1,16 +1,17 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import BlackPillButton from "@/components/BlackPillButton";
-import { SITE_LINKS, SPONSOR_TIERS, COMMUNITY_PARTNERS } from "@/lib/config";
+import { SITE_LINKS, SPONSOR_LEVEL_GROUPS, COMMUNITY_PARTNERS } from "@/lib/config";
 
-// Pull only real sponsors (non-placeholder hrefs) from the top 3 tiers
-const realSponsors = SPONSOR_TIERS.flatMap((tier) =>
-  tier.sponsors
+// Pull only real sponsors (non-placeholder hrefs) from SPONSOR_LEVEL_GROUPS
+const realSponsors = SPONSOR_LEVEL_GROUPS.flatMap((group) =>
+  group.sponsors
     .filter((s) => s.href !== "#")
-    .map((s, i) => ({ ...s, key: `sponsor-${tier.tier}-${i}` })),
+    .map((s, i) => ({ ...s, key: `sponsor-${group.level}-${i}` })),
 );
 
 // Community partners come from the COMMUNITY_PARTNERS list
@@ -19,9 +20,6 @@ const realPartners = COMMUNITY_PARTNERS.map((p, i) => ({
   logo: p.logo,
   key: `partner-${i}`,
 }));
-
-// Threshold: if items fit comfortably on screen (≤3), don't scroll
-const SCROLL_THRESHOLD = 2;
 
 type LogoItem = {
   key: string;
@@ -59,12 +57,33 @@ function LogoRow({
   direction?: "left" | "right";
   speed?: number;
 }) {
-  const shouldScroll = items.length >= SCROLL_THRESHOLD;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [shouldScroll, setShouldScroll] = useState(false);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.clientWidth;
+        // Card min-width is 13rem (208px). Gap is 32px (gap-8).
+        const estimatedWidth = items.length * 208 + Math.max(0, items.length - 1) * 32;
+        // Trigger scroll if estimated width is close to container width
+        setShouldScroll(estimatedWidth + 10 > containerWidth);
+      }
+    };
+
+    checkOverflow();
+    const observer = new ResizeObserver(() => checkOverflow());
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => observer.disconnect();
+  }, [items.length]);
+
   // Duplicate for seamless loop only when scrolling
   const track = shouldScroll ? [...items, ...items] : items;
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto w-full" ref={containerRef}>
       <p className="mb-6 text-center font-openSans text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-ink/55">
         {label}
       </p>
@@ -72,12 +91,13 @@ function LogoRow({
         <div
           className={
             shouldScroll
-              ? `flex w-max min-w-max items-center gap-14 pr-14 ${
-                  direction === "left"
-                    ? `animate-[marquee-left_${speed}s_linear_infinite]`
-                    : `animate-[marquee-right_${speed}s_linear_infinite]`
-                } hover:[animation-play-state:paused]`
+              ? "flex w-max min-w-max items-center gap-14 pr-14 hover:[animation-play-state:paused]"
               : "flex flex-wrap items-center justify-center gap-8"
+          }
+          style={
+            shouldScroll
+              ? { animation: `marquee-${direction} ${speed}s linear infinite` }
+              : undefined
           }
         >
           {track.map((item, index) => (
