@@ -4,6 +4,8 @@ import ScheduleHero from "@/components/schedule/ScheduleHero";
 import { SITE_LINKS } from "@/lib/config";
 import { getSchedulePageData } from "@/lib/schedule-data";
 
+export const dynamic = "force-dynamic";
+
 export default async function SchedulePage() {
     const data = await getSchedulePageData();
     const events = [...data.events].sort((a, b) => a.order - b.order);

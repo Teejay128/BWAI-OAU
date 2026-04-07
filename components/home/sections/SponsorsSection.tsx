@@ -4,25 +4,98 @@ import Image from "next/image";
 import Link from "next/link";
 
 import BlackPillButton from "@/components/BlackPillButton";
-import { SITE_LINKS, SPONSOR_TIERS } from "@/lib/config";
+import { SITE_LINKS, SPONSOR_TIERS, COMMUNITY_PARTNERS } from "@/lib/config";
+
+// Pull only real sponsors (non-placeholder hrefs) from the top 3 tiers
+const realSponsors = SPONSOR_TIERS.flatMap((tier) =>
+  tier.sponsors
+    .filter((s) => s.href !== "#")
+    .map((s, i) => ({ ...s, key: `sponsor-${tier.tier}-${i}` })),
+);
+
+// Community partners come from the COMMUNITY_PARTNERS list
+const realPartners = COMMUNITY_PARTNERS.map((p, i) => ({
+  href: p.href,
+  logo: p.logo,
+  key: `partner-${i}`,
+}));
+
+// Threshold: if items fit comfortably on screen (≤3), don't scroll
+const SCROLL_THRESHOLD = 2;
+
+type LogoItem = {
+  key: string;
+  href: string;
+  logo: { src: string; alt: string; width?: number; height?: number };
+};
+
+function LogoCard({ item }: { item: LogoItem }) {
+  return (
+    <Link
+      href={item.href}
+      target={item.href.startsWith("http") ? "_blank" : undefined}
+      rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+      className="group flex h-22 min-w-[13rem] items-center justify-center rounded-2xl border border-ink/10 bg-base/70 px-6 transition-transform duration-300 hover:-translate-y-0.5"
+    >
+      <Image
+        src={item.logo.src}
+        alt={item.logo.alt}
+        width={item.logo.width ?? 220}
+        height={item.logo.height ?? 120}
+        className="h-auto max-h-12 w-full max-w-40 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+      />
+    </Link>
+  );
+}
+
+function LogoRow({
+  items,
+  label,
+  direction = "left",
+  speed = 34,
+}: {
+  items: LogoItem[];
+  label: string;
+  direction?: "left" | "right";
+  speed?: number;
+}) {
+  const shouldScroll = items.length >= SCROLL_THRESHOLD;
+  // Duplicate for seamless loop only when scrolling
+  const track = shouldScroll ? [...items, ...items] : items;
+
+  return (
+    <div className="mx-auto">
+      <p className="mb-6 text-center font-openSans text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-ink/55">
+        {label}
+      </p>
+      <div className={shouldScroll ? "overflow-hidden" : ""}>
+        <div
+          className={
+            shouldScroll
+              ? `flex w-max min-w-max items-center gap-14 pr-14 ${
+                  direction === "left"
+                    ? `animate-[marquee-left_${speed}s_linear_infinite]`
+                    : `animate-[marquee-right_${speed}s_linear_infinite]`
+                } hover:[animation-play-state:paused]`
+              : "flex flex-wrap items-center justify-center gap-8"
+          }
+        >
+          {track.map((item, index) => (
+            <LogoCard key={`${item.key}-${index}`} item={item} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function SponsorsSection() {
-  const sponsorLogos = SPONSOR_TIERS
-    .slice(0, 3)
-    .flatMap((tier) => tier.sponsors.map((sponsor, index) => ({
-      ...sponsor,
-      key: `sponsor-${tier.tier}-${index}`,
-    })));
+  const hasSponsors = realSponsors.length > 0;
+  const hasPartners = realPartners.length > 0;
 
-  const partnerLogos = SPONSOR_TIERS
-    .slice(3)
-    .flatMap((tier) => tier.sponsors.map((sponsor, index) => ({
-      ...sponsor,
-      key: `partner-${tier.tier}-${index}`,
-    })));
-
-  const sponsorTrack = [...sponsorLogos, ...sponsorLogos];
-  const partnerTrack = [...partnerLogos, ...partnerLogos];
+  if (!hasSponsors && !hasPartners) {
+    return null;
+  }
 
   return (
     <section className="w-full bg-white py-16 sm:py-24">
@@ -50,60 +123,13 @@ export default function SponsorsSection() {
         </div>
       </div>
 
-      <div className="mt-16  overflow-hidden ">
-        <div className="mx-auto">
-          <p className="mb-6 text-center font-openSans text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-ink/55">
-            Sponsors
-          </p>
-          <div className="overflow-hidden">
-            <div className="flex w-max min-w-max items-center gap-14 pr-14 animate-[marquee-left_34s_linear_infinite] hover:[animation-play-state:paused]">
-              {sponsorTrack.map((sponsor, index) => (
-                <Link
-                  key={`${sponsor.key}-${index}`}
-                  href={sponsor.href}
-                  target={sponsor.href.startsWith("http") ? "_blank" : undefined}
-                  rel={sponsor.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="group flex h-22 min-w-52 items-center justify-center rounded-2xl border border-ink/10 bg-base/70 px-0 transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  <Image
-                    src={sponsor.logo.src}
-                    alt={sponsor.logo.alt}
-                    width={220}
-                    height={120}
-                    className="h-auto max-h-12 w-full max-w-40 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto mt-6">
-          <p className="mb-6 text-center font-openSans text-[0.72rem] font-semibold uppercase tracking-[0.35em] text-ink/55">
-            Partners
-          </p>
-          <div className="overflow-hidden">
-            <div className="flex w-max min-w-max items-center gap-14 pr-14 animate-[marquee-right_36s_linear_infinite] hover:[animation-play-state:paused]">
-              {partnerTrack.map((sponsor, index) => (
-                <Link
-                  key={`${sponsor.key}-${index}`}
-                  href={sponsor.href}
-                  target={sponsor.href.startsWith("http") ? "_blank" : undefined}
-                  rel={sponsor.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="group flex h-22 min-w-52 items-center justify-center rounded-2xl border border-ink/10 bg-base/70 px-0 transition-transform duration-300 hover:-translate-y-0.5"
-                >
-                  <Image
-                    src={sponsor.logo.src}
-                    alt={sponsor.logo.alt}
-                    width={220}
-                    height={120}
-                    className="h-auto max-h-12 w-full max-w-40 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
+      <div className="mt-16 flex flex-col gap-10 overflow-hidden">
+        {hasSponsors && (
+          <LogoRow items={realSponsors} label="Sponsors" direction="left" speed={34} />
+        )}
+        {hasPartners && (
+          <LogoRow items={realPartners} label="Community Partners" direction="right" speed={36} />
+        )}
       </div>
 
       <div className="mx-auto mt-14 flex max-w-3xl flex-col items-center gap-5 px-4 text-center sm:mt-16 sm:px-6 lg:px-8">

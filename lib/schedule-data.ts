@@ -48,7 +48,7 @@ export async function getSchedulePageData(): Promise<SchedulePageData> {
     });
 
     if (!config) {
-      return fallbackData();
+      return { events: [] };
     }
 
     return {
@@ -66,7 +66,7 @@ export async function getSchedulePageData(): Promise<SchedulePageData> {
       })),
     };
   } catch {
-    return fallbackData();
+    return { events: [] };
   }
 }
 

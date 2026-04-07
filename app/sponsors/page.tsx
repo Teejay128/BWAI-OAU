@@ -1,4 +1,4 @@
-import { SITE_LINKS, SPONSOR_LEVEL_GROUPS } from "@/lib/config";
+import { SITE_LINKS, SPONSOR_LEVEL_GROUPS, COMMUNITY_PARTNERS } from "@/lib/config";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,6 +7,7 @@ export default function SponsorsPage() {
     (group) => group.sponsors.length > 0,
   );
   const hasAnySponsors = sponsorGroupsWithEntries.length > 0;
+  const hasPartners = COMMUNITY_PARTNERS.length > 0;
 
   return (
     <div className="relative isolate overflow-hidden bg-base">
@@ -136,6 +137,37 @@ export default function SponsorsPage() {
           </div>
         </div>
       </section>
+
+      {hasPartners && (
+        <section className="mx-auto w-full max-w-7xl px-4 pb-14 sm:px-6 lg:px-8 lg:pb-16">
+          <h2 className="text-2xl font-bold text-ink sm:text-3xl">Community Partners</h2>
+          <div className="mt-8">
+            <article className="rounded-3xl border border-ink/10 bg-white/80 px-5 py-6 shadow-[0_16px_30px_-26px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:px-6">
+              <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-6">
+                {COMMUNITY_PARTNERS.map((partner) => (
+                  <Link
+                    key={partner.name}
+                    href={partner.href}
+                    target={partner.href.startsWith("http") ? "_blank" : undefined}
+                    rel={partner.href.startsWith("http") ? "noreferrer" : undefined}
+                    aria-label={partner.name}
+                    title={partner.name}
+                    className="inline-flex min-h-16 min-w-32 items-center justify-center rounded-2xl border border-ink/10 bg-white px-4 py-3 transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_22px_-16px_rgba(0,0,0,0.45)]"
+                  >
+                    <Image
+                      src={partner.logo.src}
+                      alt={partner.logo.alt}
+                      width={partner.logo.width}
+                      height={partner.logo.height}
+                      className="h-auto max-h-14 w-auto max-w-36 object-contain"
+                    />
+                  </Link>
+                ))}
+              </div>
+            </article>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
