@@ -318,7 +318,18 @@ export const SPONSOR_LEVEL_GROUPS: SponsorLevelGroup[] = [
   },
   {
     level: "Platinum",
-    sponsors: [],
+    sponsors: [
+      {
+        name: "African Technology Forum",
+        href: "https://www.atfchallenge.org/apply?channel=WDVBKMUJ",
+        logo: {
+          src: "/sponsors/atf.png",
+          alt: "African Technology Forum",
+          width: 200,
+          height: 80,
+        },
+      },
+    ],
   },
   {
     level: "Gold",
