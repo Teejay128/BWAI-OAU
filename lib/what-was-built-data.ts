@@ -1,10 +1,10 @@
 import "server-only";
 
 import {
-  PROJECT_TRACK_CATEGORIES,
+  COMMUNITIES,
   WHAT_WAS_BUILT_PROJECTS,
   type Project,
-  type ProjectTrackCategory,
+  type ProjectCommunity,
 } from "@/lib/config";
 import { prisma } from "@/lib/prisma";
 
@@ -16,8 +16,7 @@ export type WhatWasBuiltPageData = {
 
 export type PublicSubmitPayload = {
   name: string;
-  community: string;
-  category: ProjectTrackCategory;
+  community: ProjectCommunity;
   description: string;
   techTags: string[];
   tags: string[];
@@ -34,9 +33,9 @@ export type ToggleLikeResult = {
   likes: number;
 };
 
-function toProjectCategory(category: string): Project["category"] {
-  const match = PROJECT_TRACK_CATEGORIES.find((item) => item === category);
-  return match ?? PROJECT_TRACK_CATEGORIES[0];
+function toProjectCommunity(community: string): Project["community"] {
+  const match = COMMUNITIES.find((item) => item === community);
+  return match ?? COMMUNITIES[0];
 }
 
 function fallbackData(): WhatWasBuiltPageData {
@@ -63,16 +62,15 @@ export async function getWhatWasBuiltPageData(): Promise<WhatWasBuiltPageData> {
     }
 
     const projects = config.projects.map((project: any) => ({
-        id: project.id,
-        community: project.community,
-        tags: project.tags,
-        name: project.name,
-        description: project.description,
-        techTags: project.techTags,
-        demoHref: project.demoHref,
-        likes: project.likes,
-        category: toProjectCategory(project.category),
-      }));
+      id: project.id,
+      community: toProjectCommunity(project.community),
+      tags: project.tags,
+      name: project.name,
+      description: project.description,
+      techTags: project.techTags,
+      demoHref: project.demoHref,
+      likes: project.likes,
+    }));
 
     return {
       liveCount: projects.length,
@@ -97,7 +95,7 @@ export async function saveWhatWasBuiltPageData(payload: SavePayload): Promise<Wh
 export async function submitPublicProject(data: PublicSubmitPayload): Promise<void> {
   const config = await prisma.whatWasBuiltConfig.findUnique({
     where: { id: 1 },
-    select: { id: true },
+    select: { id: true, publicFormEnabled: true },
   }) as any;
 
   if (!config?.publicFormEnabled) {
@@ -109,17 +107,21 @@ export async function submitPublicProject(data: PublicSubmitPayload): Promise<vo
   await prisma.whatWasBuiltProject.create({
     data: {
       displayOrder: count,
-      community: data.community.trim(),
-      tags: data.tags.map((t) => t.trim()).filter(Boolean),
+      community: data.community,
+      tags: data.tags.map((tag) => tag.trim()).filter(Boolean),
       name: data.name.trim(),
       description: data.description.trim(),
-      techTags: data.techTags.map((t) => t.trim()).filter(Boolean),
+      techTags: data.techTags.map((tag) => tag.trim()).filter(Boolean),
       demoHref: data.demoHref.trim() || "#",
       likes: 0,
-      category: toProjectCategory(data.category),
       configId: 1,
     },
   });
+}
+
+export async function deleteWhatWasBuiltProject(id: number): Promise<void> {
+  await prisma.whatWasBuiltProjectLike.deleteMany({ where: { projectId: id } });
+  await prisma.whatWasBuiltProject.delete({ where: { id } });
 }
 
 export async function toggleWhatWasBuiltProjectLike(

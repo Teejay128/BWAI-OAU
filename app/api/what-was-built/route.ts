@@ -4,7 +4,7 @@ import {
   submitPublicProject,
   type PublicSubmitPayload,
 } from "@/lib/what-was-built-data";
-import { PROJECT_TRACK_CATEGORIES } from "@/lib/config";
+import { COMMUNITIES } from "@/lib/config";
 
 export async function GET() {
   const data = await getWhatWasBuiltPageData();
@@ -20,7 +20,6 @@ export async function POST(request: Request) {
 
   const name = body?.name?.trim();
   const community = body?.community?.trim();
-  const category = body?.category;
   const description = body?.description?.trim();
   const techTags = Array.isArray(body?.techTags) ? body.techTags : [];
   const tags = Array.isArray(body?.tags) ? body.tags : [];
@@ -30,8 +29,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Name, community, and description are required." }, { status: 400 });
   }
 
-  if (!category || !PROJECT_TRACK_CATEGORIES.includes(category as never)) {
-    return NextResponse.json({ error: "A valid category is required." }, { status: 400 });
+  if (!COMMUNITIES.includes(community as never)) {
+    return NextResponse.json({ error: "A valid community is required." }, { status: 400 });
   }
 
   if (name.length > 120 || description.length > 500 || community.length > 80) {
@@ -39,7 +38,14 @@ export async function POST(request: Request) {
   }
 
   try {
-    await submitPublicProject({ name, community, category, description, techTags, tags, demoHref });
+    await submitPublicProject({
+      name,
+      community: community as PublicSubmitPayload["community"],
+      description,
+      techTags,
+      tags,
+      demoHref,
+    });
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
     if (error instanceof Error && error.message === "FORM_CLOSED") {

@@ -3,12 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Lottie from "lottie-react";
-import {
-    PROJECT_TRACK_CATEGORIES,
-    WHAT_WAS_BUILT_PROJECTS,
-    SITE_LINKS,
-    type Project,
-} from "@/lib/config";
+import { COMMUNITIES, WHAT_WAS_BUILT_PROJECTS, SITE_LINKS, type Project } from "@/lib/config";
 import { MdRocketLaunch } from "react-icons/md";
 import ProjectCard from "@/components/what-was-built/ProjectCard";
 import BlackPillButton from "@/components/BlackPillButton";
@@ -18,7 +13,7 @@ function WhatWasBuiltPage() {
     const DEVICE_ID_STORAGE_KEY = "bwai-device-id";
     const LIKED_PROJECTS_STORAGE_KEY = "bwai-liked-project-ids";
 
-    const [activeCategory, setActiveCategory] = useState<string>("All");
+    const [activeCommunity, setActiveCommunity] = useState<string>("All");
     const [likedProjects, setLikedProjects] = useState<Set<number>>(new Set());
     const [likingProjects, setLikingProjects] = useState<Set<number>>(new Set());
     const [deviceId, setDeviceId] = useState<string>("");
@@ -29,14 +24,17 @@ function WhatWasBuiltPage() {
     const EMPTY_STATE_LOTTIE_URL =
         "https://assets10.lottiefiles.com/packages/lf20_touohxv0.json";
 
-    const allCategories: string[] = ["All", ...PROJECT_TRACK_CATEGORIES];
+    const allCommunities = useMemo(
+        () => ["All", ...COMMUNITIES.filter((community) => projects.some((project) => project.community === community))],
+        [projects],
+    );
 
     const filteredProjects = useMemo(
         () =>
-            activeCategory === "All"
+            activeCommunity === "All"
                 ? projects
-                : projects.filter((p) => p.category === activeCategory),
-        [activeCategory, projects],
+                : projects.filter((project) => project.community === activeCommunity),
+        [activeCommunity, projects],
     );
 
     useEffect(() => {
@@ -200,7 +198,6 @@ function WhatWasBuiltPage() {
                             </p>
                         </motion.div>
 
-                        {/* Live Counter */}
                         <motion.div
                             className="inline-flex w-full items-center justify-start sm:w-auto sm:justify-end"
                             initial={{ opacity: 0, y: 20 }}
@@ -214,7 +211,7 @@ function WhatWasBuiltPage() {
                                 </div>
                             ) : (
                                 <div
-                                    className="inline-flex min-h-12 items-center gap-3 rounded-full px-4 py-2 sm:px-5 bg-base/95"
+                                    className="inline-flex min-h-12 items-center gap-3 rounded-full bg-base/95 px-4 py-2 sm:px-5"
                                     aria-label={`${liveCount} projects built so far`}
                                 >
                                     <span className="flex items-center justify-center rounded-full text-coreBlue">
@@ -235,41 +232,37 @@ function WhatWasBuiltPage() {
                 </div>
             </section>
 
-            {/* ── Category Filter ──────────────────────────────────────────────── */}
             {
                 !isLoadingProjects && liveCount > 0 && (
                     <section className="px-4 pb-8 sm:px-6 lg:px-8">
                         <div className="mx-auto w-full max-w-7xl">
                             <div className="flex gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
-                                {allCategories
-                                    .filter((cat) => projects.some(p => p.category === cat) || cat === "All")
-                                    .map((cat, i) => (
-                                        <motion.button
-                                            key={cat}
-                                            type="button"
-                                            onClick={() => setActiveCategory(cat)}
-                                            initial={{ opacity: 0, y: 8 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{
-                                                duration: 0.35,
-                                                ease: "easeOut",
-                                                delay: 0.2 + i * 0.05,
-                                            }}
-                                            className={`cursor-pointer inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 ${activeCategory === cat
-                                                    ? "bg-ink text-white"
-                                                    : "border border-ink/20 bg-white text-ink hover:border-ink/40 hover:bg-ink/5"
-                                                }`}
-                                        >
-                                            {cat}
-                                        </motion.button>
-                                    ))}
+                                {allCommunities.map((community, index) => (
+                                    <motion.button
+                                        key={community}
+                                        type="button"
+                                        onClick={() => setActiveCommunity(community)}
+                                        initial={{ opacity: 0, y: 8 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{
+                                            duration: 0.35,
+                                            ease: "easeOut",
+                                            delay: 0.2 + index * 0.05,
+                                        }}
+                                        className={`cursor-pointer inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 ${activeCommunity === community
+                                                ? "bg-ink text-white"
+                                                : "border border-ink/20 bg-white text-ink hover:border-ink/40 hover:bg-ink/5"
+                                            }`}
+                                    >
+                                        {community}
+                                    </motion.button>
+                                ))}
                             </div>
                         </div>
                     </section>
                 )
             }
 
-            {/* ── Projects Grid ───────────────────────────────────────────────── */}
             <section className="px-4 pb-16 sm:px-6 lg:px-8">
                 <div className="mx-auto w-full max-w-7xl">
                     {isLoadingProjects ? (
@@ -308,14 +301,14 @@ function WhatWasBuiltPage() {
                                 We are waiting for the first project upload
                             </h2>
                             <p className="mt-3 max-w-xl text-sm text-ink/70 sm:text-base">
-                                Nothing has been submitted yet. Once teams upload their work,
-                                this space will start filling up live.
+                                Nothing has been submitted yet. Once communities start uploading,
+                                this space will fill up live.
                             </p>
                         </motion.div>
                     ) : (
                         <AnimatePresence mode="wait">
                             <motion.div
-                                key={activeCategory}
+                                key={activeCommunity}
                                 className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
                                 initial={{ opacity: 0, filter: "blur(6px)", scale: 0.99 }}
                                 animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
@@ -338,7 +331,6 @@ function WhatWasBuiltPage() {
                 </div>
             </section>
 
-            {/* ── Explore More ────────────────────────────────────────────────── */}
             {
                 !isLoadingProjects && liveCount > 0 && (
                     <div className="pb-20 text-center">

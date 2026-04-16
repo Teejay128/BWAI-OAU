@@ -9,6 +9,7 @@ import { CODE_STORAGE_KEY } from "../page";
 type EditorState = {
   publicFormEnabled: boolean;
   liveCount: number;
+  projects: { id: number; name: string; community: string }[];
 };
 
 type AuthState = "checking" | "locked" | "unlocked";
@@ -18,13 +19,14 @@ export default function WhatWasBuiltConfigPage() {
   const [accessCode, setAccessCode] = useState("");
   const [authError, setAuthError] = useState("");
 
-  const [data, setData] = useState<EditorState>({ publicFormEnabled: false, liveCount: 0 });
+  const [data, setData] = useState<EditorState>({ publicFormEnabled: false, liveCount: 0, projects: [] });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isDirty, setIsDirty] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const authHeaders = useMemo(
     () => ({
@@ -126,6 +128,22 @@ export default function WhatWasBuiltConfigPage() {
     setSuccess("");
   }
 
+  async function deleteProject(id: number) {
+    setDeletingId(id);
+    try {
+      await apiClient.delete(`/config/what-was-built/${id}`, { headers: authHeaders });
+      setData((prev) => ({
+        ...prev,
+        liveCount: prev.liveCount - 1,
+        projects: prev.projects.filter((p) => p.id !== id),
+      }));
+    } catch {
+      setError("Could not delete project.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   async function save() {
     setSaving(true);
     setError("");
@@ -196,7 +214,7 @@ export default function WhatWasBuiltConfigPage() {
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="font-openSans text-xs font-bold uppercase tracking-[0.14em] text-ink/55">Config Route</p>
+            <p className="font-openSans text-xs font-bold uppercase tracking-[0.12em] text-ink/55">Config Route</p>
             <h1 className="mt-2 text-3xl font-bold text-ink">What Was Built</h1>
           </div>
           <Link href="/config" className="text-sm font-semibold text-coreBlue">
@@ -237,7 +255,7 @@ export default function WhatWasBuiltConfigPage() {
               </div>
             </div>
           ) : (
-            <div className="space-y-3 flex flex-col gap-4">
+            <div className="flex flex-col gap-4">
               {/* Live counter */}
               <div className="rounded-xl bg-surface px-4 py-3">
                 <p className="text-xs font-openSans uppercase tracking-[0.12em] text-ink/55">Live Counter</p>
@@ -245,6 +263,60 @@ export default function WhatWasBuiltConfigPage() {
                   {data.liveCount} project{data.liveCount !== 1 ? "s" : ""} submitted
                 </p>
               </div>
+
+              {/* Submitted Projects */}
+              {data.projects.length > 0 && (
+                <div className="rounded-xl bg-surface px-4 py-4">
+                  <p className="mb-3 text-sm font-bold text-ink">Submitted Projects</p>
+                  <ul className="space-y-2">
+                    {data.projects.map((project) => (
+                      <li
+                        key={project.id}
+                        className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2.5"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-ink">{project.name}</p>
+                          <p className="truncate text-xs text-ink/50">{project.community}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => deleteProject(project.id)}
+                          disabled={deletingId === project.id}
+                          aria-label={`Delete ${project.name}`}
+                          className="shrink-0 rounded-lg p-1.5 text-ink/35 transition-colors hover:bg-coreRed/10 hover:text-coreRed disabled:opacity-40"
+                        >
+                          {deletingId === project.id ? (
+                            <svg
+                              className="h-4 w-4 animate-spin"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                            </svg>
+                          ) : (
+                            <svg
+                              className="h-4 w-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="3 6 5 6 21 6" />
+                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                              <path d="M10 11v6M14 11v6" />
+                              <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                            </svg>
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Public Submission Form Toggle */}
               <div className="rounded-xl bg-surface px-4 py-4">
@@ -260,12 +332,10 @@ export default function WhatWasBuiltConfigPage() {
                     role="switch"
                     aria-checked={data.publicFormEnabled}
                     onClick={togglePublicForm}
-                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coreBlue/40 ${data.publicFormEnabled ? "bg-coreBlue" : "bg-ink/20"
-                      }`}
+                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coreBlue/40 ${data.publicFormEnabled ? "bg-coreBlue" : "bg-ink/20"}`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${data.publicFormEnabled ? "translate-x-6" : "translate-x-1"
-                        }`}
+                      className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${data.publicFormEnabled ? "translate-x-6" : "translate-x-1"}`}
                     />
                   </button>
                 </div>

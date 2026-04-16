@@ -21,20 +21,19 @@ model WhatWasBuiltConfig {
 }
 
 model WhatWasBuiltProject {
-  id           Int                @id @default(autoincrement())
-  displayOrder Int                @default(0)
-  community    String
-  tags         String[]
-  name         String
-  description  String
-  techTags     String[]
-  demoHref     String
-  likes        Int                @default(0)
-  category     String
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  configId     Int                @default(1)
-  config       WhatWasBuiltConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  id            Int                    @id @default(autoincrement())
+  displayOrder  Int                    @default(0)
+  community     String
+  tags          String[]
+  name          String
+  description   String
+  techTags      String[]
+  demoHref      String
+  likes         Int                    @default(0)
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  configId      Int                    @default(1)
+  config        WhatWasBuiltConfig     @relation(fields: [configId], references: [id], onDelete: Cascade)
   likesByDevice WhatWasBuiltProjectLike[]
 
   @@index([configId, displayOrder])

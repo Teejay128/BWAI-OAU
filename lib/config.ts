@@ -6,10 +6,10 @@ export const EVENT_DATES = {
 export const COMMUNITIES = [
   "Data Science & ML",
   "Mobile & Web Dev",
-  "Cloud & Cybersecurity",
-  "Game Dev & Design",
-  "The Creative Track",
-  "GDG OAU",
+  "Cloud",
+  "Cybersecurity",
+  "Game Development",
+  "Quantum Finance"
 ];
 
 export const NAV_LINKS = [
@@ -38,11 +38,10 @@ export const SITE_LINKS = {
 export const HERO_PILLS = [
   { label: "Data Science & ML", tone: "coreBlue" },
   { label: "Mobile & Web Dev", tone: "coreGreen" },
-  { label: "Cloud & Cybersecurity", tone: "surface" },
-  { label: "Game Dev & Design", tone: "coreYellow" },
-  { label: "The Creative Track", tone: "coreRed" },
-  { label: "GDG OAU Core", tone: "gray" },
-  { label: "AI for Everyone", tone: "coreBlue" },
+  { label: "Cloud", tone: "surface" },
+  { label: "Cybersecurity", tone: "surface" },
+  { label: "Game Development", tone: "coreYellow" },
+  { label: "Quantum Finance", tone: "coreRed" },
 ] as const;
 
 export const HERO_PILL_TONE_COLORS = {
@@ -373,49 +372,41 @@ export const LUMA_LINKS = {
 
 // ── What Was Built ────────────────────────────────────────────────────────────
 
-export const PROJECT_TRACK_CATEGORIES = [
-  "Data Science & ML",
-  "Mobile & Web Dev",
-  "Cloud & Cybersecurity",
-  "Game Dev & Design",
-  "The Creative Track",
-] as const;
-
-export type ProjectTrackCategory = (typeof PROJECT_TRACK_CATEGORIES)[number];
+export type ProjectCommunity = (typeof COMMUNITIES)[number];
 
 export type Project = {
   id: number;
-  community: string;
+  community: ProjectCommunity;
   tags: string[];
   name: string;
   description: string;
   techTags: string[];
   demoHref: string;
   likes: number;
-  category: ProjectTrackCategory;
 };
 
 export const COMMUNITY_COLORS: Record<string, string> = {
-  "GDG OAU": "#ccf6c5",
-  "GDG Lagos": "#ff7daf",
-  "GDG Ife": "#c3ecf6",
-  "GDG UI": "#ffe7a5",
-  "The Creative Hub": "#f8d8d8",
-  "Cloud Nigeria": "#57caff",
+  "Data Science & ML": "#ccf6c5",
+  "Mobile & Web Dev": "#ff7daf",
+  "Cloud & Cybersecurity": "#c3ecf6",
+  "Game Dev & Design": "#ffe7a5",
+  "The Creative Track": "#f8d8d8",
+  "GDG OAU": "#57caff",
 };
 
 export const TECH_TAG_COLORS: Record<string, string> = {
-  "Gemini API": "#c3ecf6",
-  ADK: "#ccf6c5",
-  Firebase: "#ffe7a5",
-  "Vertex AI": "#f8d8d8",
-  "Cloud Run": "#57caff",
+  "Gemini API": "#d357ff",
+  "Google ADK": "#db8f5c",
+  "Firebase": "#ffd427",
+  "Vertex AI": "#ff7daf",
+  "Cloud Run": "#5cdb6d",
+  "Bayse API": "#57caff",
 };
 
 export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
   {
     id: 1,
-    community: "GDG OAU",
+    community: "Data Science & ML",
     tags: ["Pre-Series"],
     name: "EcoScan AI",
     description:
@@ -423,11 +414,10 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["Gemini API", "ADK"],
     demoHref: "#",
     likes: 24,
-    category: "Data Science & ML",
   },
   {
     id: 2,
-    community: "GDG Lagos",
+    community: "Mobile & Web Dev",
     tags: [],
     name: "PulseQuest",
     description:
@@ -435,11 +425,10 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["Gemini API"],
     demoHref: "#",
     likes: 56,
-    category: "Mobile & Web Dev",
   },
   {
     id: 3,
-    community: "GDG Ife",
+    community: "Data Science & ML",
     tags: ["Pre-Series"],
     name: "LexiLegal",
     description:
@@ -447,11 +436,10 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["Gemini API", "ADK"],
     demoHref: "#",
     likes: 102,
-    category: "Data Science & ML",
   },
   {
     id: 4,
-    community: "GDG UI",
+    community: "Data Science & ML",
     tags: [],
     name: "AgriFlow",
     description:
@@ -459,11 +447,10 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["ADK"],
     demoHref: "#",
     likes: 39,
-    category: "Data Science & ML",
   },
   {
     id: 5,
-    community: "The Creative Hub",
+    community: "The Creative Track",
     tags: [],
     name: "SonicCanvas",
     description:
@@ -471,11 +458,10 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["Gemini API"],
     demoHref: "#",
     likes: 88,
-    category: "The Creative Track",
   },
   {
     id: 6,
-    community: "Cloud Nigeria",
+    community: "Cloud & Cybersecurity",
     tags: [],
     name: "SecureNodes",
     description:
@@ -483,7 +469,6 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
     techTags: ["ADK"],
     demoHref: "#",
     likes: 15,
-    category: "Cloud & Cybersecurity",
   },
 ];
 

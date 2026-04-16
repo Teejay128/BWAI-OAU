@@ -2,20 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  PROJECT_TRACK_CATEGORIES,
-  TECH_TAG_COLORS,
-  COMMUNITIES,
-  type ProjectTrackCategory,
-} from "@/lib/config";
+import { TECH_TAG_COLORS, COMMUNITIES, type ProjectCommunity } from "@/lib/config";
 import { apiClient } from "@/lib/axios";
 import { MdCheckCircle, MdRocketLaunch } from "react-icons/md";
 import { FiAlertCircle } from "react-icons/fi";
 
 type FormData = {
   name: string;
-  community: string;
-  category: ProjectTrackCategory;
+  community: ProjectCommunity;
   description: string;
   techTags: string[];
   tags: string;
@@ -46,8 +40,7 @@ export default function SubmitProjectPage() {
   const [status, setStatus] = useState<PageStatus>("loading");
   const [form, setForm] = useState<FormData>({
     name: "",
-    community: "",
-    category: PROJECT_TRACK_CATEGORIES[0],
+    community: COMMUNITIES[0],
     description: "",
     techTags: [],
     tags: "",
@@ -86,7 +79,7 @@ export default function SubmitProjectPage() {
   function toggleTechTag(tag: string) {
     setForm((prev) => {
       const next = prev.techTags.includes(tag)
-        ? prev.techTags.filter((t) => t !== tag)
+        ? prev.techTags.filter((techTag) => techTag !== tag)
         : [...prev.techTags, tag];
       return { ...prev, techTags: next };
     });
@@ -98,12 +91,13 @@ export default function SubmitProjectPage() {
     if (!form.name.trim()) errors.name = "Project name is required.";
     else if (form.name.trim().length > 120) errors.name = "Max 120 characters.";
 
-    if (!form.community.trim()) errors.community = "Team / community name is required.";
+    if (!form.community.trim()) errors.community = "Community is required.";
     else if (form.community.trim().length > 80) errors.community = "Max 80 characters.";
 
     if (!form.description.trim()) errors.description = "Description is required.";
-    else if (form.description.trim().length > DESC_MAX)
+    else if (form.description.trim().length > DESC_MAX) {
       errors.description = `Max ${DESC_MAX} characters.`;
+    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -118,14 +112,13 @@ export default function SubmitProjectPage() {
 
     const extraTags = form.tags
       .split(",")
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
 
     try {
       await apiClient.post("/what-was-built", {
         name: form.name.trim(),
-        community: form.community.trim(),
-        category: form.category,
+        community: form.community,
         description: form.description.trim(),
         techTags: form.techTags,
         tags: extraTags,
@@ -147,7 +140,6 @@ export default function SubmitProjectPage() {
     }
   }
 
-  // ── Loading ─────────────────────────────────────────────────────────────────
   if (status === "loading") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -156,7 +148,6 @@ export default function SubmitProjectPage() {
     );
   }
 
-  // ── Closed ──────────────────────────────────────────────────────────────────
   if (status === "closed") {
     return (
       <div className="flex min-h-[70vh] items-center justify-center px-4">
@@ -179,7 +170,6 @@ export default function SubmitProjectPage() {
     );
   }
 
-  // ── Success ──────────────────────────────────────────────────────────────────
   if (status === "submitted") {
     return (
       <div className="flex min-h-[70vh] items-center justify-center px-4">
@@ -211,8 +201,7 @@ export default function SubmitProjectPage() {
             onClick={() => {
               setForm({
                 name: "",
-                community: "",
-                category: PROJECT_TRACK_CATEGORIES[0],
+                community: COMMUNITIES[0],
                 description: "",
                 techTags: [],
                 tags: "",
@@ -229,10 +218,8 @@ export default function SubmitProjectPage() {
     );
   }
 
-  // ── Form ─────────────────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-surface pb-24">
-      {/* Hero */}
       <section className="px-4 pb-10 pt-14 sm:px-6 lg:px-8 lg:pt-20">
         <div className="mx-auto w-full max-w-2xl">
           <motion.div
@@ -257,7 +244,6 @@ export default function SubmitProjectPage() {
         </div>
       </section>
 
-      {/* Form */}
       <section className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto w-full max-w-2xl">
           <motion.form
@@ -268,13 +254,13 @@ export default function SubmitProjectPage() {
             transition={{ duration: 0.55, ease: "easeOut", delay: 0.08 }}
             noValidate
           >
-            {/* ── Section 1: About Your Project ────────────────────────────── */}
             <div className="rounded-3xl bg-white p-6 shadow-[0_12px_40px_rgba(30,30,30,0.06)] sm:p-8">
               <h2 className="mb-1 text-lg font-bold text-ink">About your project</h2>
-              <p className="mb-6 text-sm text-ink/50">The basics — what&apos;s it called and who built it?</p>
+              <p className="mb-6 text-sm text-ink/50">
+                The basics, what it&apos;s called and which community it belongs to.
+              </p>
 
-              <div className="space-y-4">
-                {/* Project Name */}
+              <div className="flex flex-col gap-5">
                 <div>
                   <label className="mb-1.5 flex items-center justify-between text-sm font-semibold text-ink">
                     <span>
@@ -305,65 +291,39 @@ export default function SubmitProjectPage() {
                   </AnimatePresence>
                 </div>
 
-                {/* Community + Category row */}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {/* Community */}
-                  <div>
-                    <label className="mb-1.5 block text-sm font-semibold text-ink">
-                      Team / community <span className="text-coreRed">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      list="community-suggestions"
-                      value={form.community}
-                      onChange={(e) => set("community", e.target.value)}
-                      placeholder="e.g. GDG OAU"
-                      maxLength={80}
-                      className={`w-full rounded-xl bg-surface px-4 py-3 text-sm text-ink outline-none ring-2 transition-shadow placeholder:text-ink/30 focus:ring-coreBlue/30 ${
-                        fieldErrors.community ? "ring-coreRed/40" : "ring-transparent"
-                      }`}
-                    />
-                    <datalist id="community-suggestions">
-                      {COMMUNITIES.map((c) => (
-                        <option key={c} value={c} />
-                      ))}
-                    </datalist>
-                    <AnimatePresence>
-                      {fieldErrors.community && (
-                        <motion.p
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-1.5 text-xs text-coreRed"
-                        >
-                          {fieldErrors.community}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Track */}
-                  <div>
-                    <label className="mb-1.5 block text-sm font-semibold text-ink">
-                      Track <span className="text-coreRed">*</span>
-                    </label>
-                    <select
-                      value={form.category}
-                      onChange={(e) => set("category", e.target.value as ProjectTrackCategory)}
-                      className="w-full rounded-xl bg-surface px-4 py-3 text-sm text-ink outline-none ring-2 ring-transparent transition-shadow focus:ring-coreBlue/30"
-                    >
-                      {PROJECT_TRACK_CATEGORIES.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div>
+                  <label className="mb-1.5 block text-sm font-semibold text-ink">
+                    Community <span className="text-coreRed">*</span>
+                  </label>
+                  <select
+                    value={form.community}
+                    onChange={(e) => set("community", e.target.value as ProjectCommunity)}
+                    className={`w-full rounded-xl bg-surface px-4 py-3 text-sm text-ink outline-none ring-2 transition-shadow focus:ring-coreBlue/30 ${
+                      fieldErrors.community ? "ring-coreRed/40" : "ring-transparent"
+                    }`}
+                  >
+                    {COMMUNITIES.map((community) => (
+                      <option key={community} value={community}>
+                        {community}
+                      </option>
+                    ))}
+                  </select>
+                  <AnimatePresence>
+                    {fieldErrors.community && (
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="mt-1.5 text-xs text-coreRed"
+                      >
+                        {fieldErrors.community}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
 
-            {/* ── Section 2: What You Built ─────────────────────────────────── */}
             <div className="mt-4 rounded-3xl bg-white p-6 shadow-[0_12px_40px_rgba(30,30,30,0.06)] sm:p-8">
               <h2 className="mb-1 text-lg font-bold text-ink">What you built</h2>
               <p className="mb-6 text-sm text-ink/50">A short pitch for the showcase card.</p>
@@ -400,13 +360,11 @@ export default function SubmitProjectPage() {
               </div>
             </div>
 
-            {/* ── Section 3: Tech & Links ──────────────────────────────────── */}
             <div className="mt-4 rounded-3xl bg-white p-6 shadow-[0_12px_40px_rgba(30,30,30,0.06)] sm:p-8">
               <h2 className="mb-1 text-lg font-bold text-ink">Tech &amp; links</h2>
-              <p className="mb-6 text-sm text-ink/50">Optional — but helps tell the full story.</p>
+              <p className="mb-6 text-sm text-ink/50">Optional, but helps tell the full story.</p>
 
-              <div className="space-y-5">
-                {/* Tech Tags */}
+              <div className="flex flex-col gap-5">
                 <div>
                   <p className="mb-2.5 text-sm font-semibold text-ink">Tech stack used</p>
                   <div className="flex flex-wrap gap-2">
@@ -419,13 +377,15 @@ export default function SubmitProjectPage() {
                           onClick={() => toggleTechTag(tag)}
                           className={`inline-flex cursor-pointer items-center rounded-full px-4 py-2 text-sm font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 ${
                             active
-                              ? "bg-ink text-white"
+                              ? "text-white"
                               : "border border-ink/20 bg-white text-ink hover:border-ink/40 hover:bg-ink/5"
                           }`}
+                          style={{
+                            backgroundColor: active ? TECH_TAG_COLORS[tag] : undefined,
+                            borderColor: active ? TECH_TAG_COLORS[tag] : undefined,
+                          }}
                         >
-                          {active && (
-                            <span className="mr-1.5 text-white/70">✓</span>
-                          )}
+                          {active && <span className="mr-1.5 text-white/70">✓</span>}
                           {tag}
                         </button>
                       );
@@ -433,26 +393,22 @@ export default function SubmitProjectPage() {
                   </div>
                 </div>
 
-                {/* Additional Labels */}
                 <div>
                   <label className="mb-1.5 block text-sm font-semibold text-ink">
-                    Additional labels{" "}
-                    <span className="font-normal text-ink/40">(optional)</span>
+                    Additional labels <span className="font-normal text-ink/40">(optional)</span>
                   </label>
                   <input
                     type="text"
                     value={form.tags}
                     onChange={(e) => set("tags", e.target.value)}
-                    placeholder="e.g. Pre-Series, Main Event — comma-separated"
+                    placeholder="e.g. Pre-Series, Main Event, Demo Day"
                     className="w-full rounded-xl bg-surface px-4 py-3 text-sm text-ink outline-none ring-2 ring-transparent transition-shadow placeholder:text-ink/30 focus:ring-coreBlue/30"
                   />
                 </div>
 
-                {/* Demo Link */}
                 <div>
                   <label className="mb-1.5 block text-sm font-semibold text-ink">
-                    Demo / GitHub link{" "}
-                    <span className="font-normal text-ink/40">(optional)</span>
+                    Demo / GitHub link <span className="font-normal text-ink/40">(optional)</span>
                   </label>
                   <input
                     type="url"
@@ -465,7 +421,6 @@ export default function SubmitProjectPage() {
               </div>
             </div>
 
-            {/* ── Submit ───────────────────────────────────────────────────── */}
             <div className="mt-6">
               <AnimatePresence>
                 {submitError && (
