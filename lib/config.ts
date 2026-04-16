@@ -191,24 +191,10 @@ export const SPONSOR_TIERS = [
     tier: "Gold",
     sponsors: [
       {
-        href: "#",
+        href: "https://www.bayse.markets/",
         logo: {
-          src: "/sponsor-placeholder-sm.svg",
-          alt: "Gold sponsor logo placeholder",
-        },
-      },
-      {
-        href: "#",
-        logo: {
-          src: "/sponsor-placeholder-sm.svg",
-          alt: "Gold sponsor logo placeholder",
-        },
-      },
-      {
-        href: "#",
-        logo: {
-          src: "/sponsor-placeholder-sm.svg",
-          alt: "Gold sponsor logo placeholder",
+          src: "/sponsors/bayse.png",
+          alt: "Bayse",
         },
       },
     ],
@@ -331,11 +317,33 @@ export const SPONSOR_LEVEL_GROUPS: SponsorLevelGroup[] = [
   },
   {
     level: "Platinum",
-    sponsors: [],
+    sponsors: [
+      {
+        name: "African Technology Forum",
+        href: "https://www.atfchallenge.org/apply?channel=WDVBKMUJ",
+        logo: {
+          src: "/sponsors/atf.png",
+          alt: "African Technology Forum",
+          width: 200,
+          height: 80,
+        },
+      },
+    ],
   },
   {
     level: "Gold",
-    sponsors: [],
+    sponsors: [
+      {
+        name: "Bayse",
+        href: "https://www.bayse.markets/",
+        logo: {
+          src: "/sponsors/bayse.png",
+          alt: "Bayse",
+          width: 200,
+          height: 80,
+        },
+      },
+    ],
   },
   {
     level: "Silver",
@@ -350,6 +358,46 @@ export const SPONSOR_LEVEL_GROUPS: SponsorLevelGroup[] = [
     sponsors: [],
   },
 ] as const;
+
+export type CommunityPartner = {
+  name: string;
+  href: string;
+  logo: { src: string; alt: string; width: number; height: number };
+};
+
+// Add real community partners here. Images go in public/partners/
+export const COMMUNITY_PARTNERS: CommunityPartner[] = [
+  {
+    name: "Community Partner 1",
+    href: "#",
+    logo: {
+      src: "/partners/Mask group.png",
+      alt: "Community Partner",
+      width: 200,
+      height: 80,
+    },
+  },
+  {
+    name: "Community Partner 2",
+    href: "#",
+    logo: {
+      src: "/partners/IMG-20260404-WA0028.jpg",
+      alt: "Community Partner",
+      width: 200,
+      height: 80,
+    },
+  },
+  {
+    name: "Community Partner 3",
+    href: "#",
+    logo: {
+      src: "/partners/IMG_6519.JPG",
+      alt: "Community Partner",
+      width: 200,
+      height: 80,
+    },
+  },
+];
 
 export const FOOTER_CREDIT = "Powered by Google Developer Groups";
 
