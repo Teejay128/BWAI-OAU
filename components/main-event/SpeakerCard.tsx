@@ -24,7 +24,7 @@ function SpeakerCard({ index, speaker }: { index: number; speaker: Speaker }) {
 				<img
 					src={speaker.photo}
 					alt={speaker.name}
-					className="h-full w-full object-cover grayscale-75 transition-all duration-300 ease-in-out hover:grayscale-0"
+					className="h-full w-full object-cover brightness-50 contrast-125 grayscale-75 transition-all duration-300 ease-in-out hover:brightness-75 hover:contrast-100 hover:grayscale-25"
 				/>
 			</div>
 
