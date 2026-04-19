@@ -435,7 +435,7 @@ export type Project = {
 
 export const COMMUNITY_COLORS: Record<string, string> = {
   "Data Science & ML": "#ccf6c5",
-  "Mobile & Web Dev": "#ff7daf",
+  "Web & Mobile Dev": "#ff7daf",
   "Cloud & Cybersecurity": "#c3ecf6",
   "Game Dev & Design": "#ffe7a5",
   "The Creative Track": "#f8d8d8",
@@ -445,7 +445,7 @@ export const COMMUNITY_COLORS: Record<string, string> = {
 export const TECH_TAG_COLORS: Record<string, string> = {
   "Gemini API": "#d357ff",
   "Google ADK": "#db8f5c",
-  "Firebase": "#ffd427",
+  "Antigravity": "#5c6ddb",
   "Vertex AI": "#ff7daf",
   "Cloud Run": "#5cdb6d",
   "Bayse API": "#57caff",
@@ -465,7 +465,7 @@ export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
   },
   {
     id: 2,
-    community: "Mobile & Web Dev",
+    community: "Web & Mobile Dev",
     tags: [],
     name: "PulseQuest",
     description:
@@ -547,7 +547,7 @@ export const EVENT_SPEAKERS: Speaker[] = [
     name: "Michael Chen",
     title: "Product Manager",
     organization: "InnovateLabs",
-    track: "Mobile & Web Dev",
+    track: "Web & Mobile Dev",
     photo: "gdg-speaker-avatar.png",
   },
   {
