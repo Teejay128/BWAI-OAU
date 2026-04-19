@@ -8,11 +8,11 @@ import SpeakerCard from "@/components/main-event/SpeakerCard";
 import PhotoCarousel from "@/components/main-event/PhotoCarousel";
 import TimelineSchedule from "@/components/main-event/TimelineSchedule";
 import TicketPlaceholder from "@/components/main-event/TicketPlaceholder";
-import { EVENT_DATES, EVENT_SPEAKERS, EVENT_SCHEDULE } from "@/lib/config";
+import { EVENT_DATES, EVENT_SPEAKERS, EVENT_SCHEDULE, EVENT_LOCATION } from "@/lib/config";
 
 export default function MainEventSection() {
 	return (
-		<motion.section id="main-event">
+		<motion.section id="main-event" className="w-full overflow-x-hidden">
 			{/* Hero Block */}
 			<section
 				className="relative overflow-hidden px-4 pb-14 pt-16 sm:px-6 sm:pt-20 lg:px-8 lg:pb-18 lg:pt-24 bg-cover bg-center bg-no-repeat"
@@ -47,7 +47,7 @@ export default function MainEventSection() {
 						whileInView={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.65, delay: 0.26 }}
 					>
-						Obafemi Awolowo University{" "}
+						{EVENT_LOCATION.mainEvent}
 						<MdLocationPin className="inline" />
 					</motion.p>
 					<motion.p
@@ -73,11 +73,12 @@ export default function MainEventSection() {
 					</motion.div>
 				</motion.div>
 			</section>
+
 			{/* Day Schedule */}
 			<section className="px-4 py-16 sm:px-6 lg:px-8">
 				<motion.div className="mx-auto max-w-5xl">
 					<motion.h2
-						className="mb-16 flex items-center justify-center gap-3 text-center text-3xl font-bold text-ink sm:text-4xl"
+						className="mb-16 flex items-center justify-center gap-2 sm:gap-3 text-center text-2xl font-bold text-ink sm:text-4xl"
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: false, amount: 0.4 }}
@@ -87,27 +88,28 @@ export default function MainEventSection() {
 						<img
 							src="/branding.png"
 							alt="GDG Branding"
-							className="h-8 w-auto"
+							className="h-6 sm:h-8 w-auto"
 						/>
 					</motion.h2>
 					<TimelineSchedule events={EVENT_SCHEDULE} />
 				</motion.div>
 			</section>
+
 			{/* Speakers Grid */}
 			<section className="px-4 py-16 sm:px-6 lg:px-8">
 				<div className="mx-auto max-w-6xl">
 					<motion.h2
-						className="mb-12 text-center text-3xl font-bold text-ink sm:text-4xl"
+						className="mb-12 flex items-center justify-center gap-2 sm:gap-3 text-center text-2xl font-bold text-ink sm:text-4xl"
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: false, amount: 0.4 }}
 						transition={{ duration: 0.6 }}
 					>
-						Speakers{" "}
+						Speakers
 						<img
 							src="/branding.png"
 							alt="GDG Branding"
-							className="inline h-8 w-auto ml-2"
+							className="h-6 sm:h-8 w-auto"
 						/>
 					</motion.h2>
 
@@ -127,17 +129,17 @@ export default function MainEventSection() {
 			<section className="px-4 py-16 sm:px-6 lg:px-8">
 				<motion.div className="mx-auto max-w-6xl">
 					<motion.h2
-						className="mb-6 flex items-center justify-center text-center text-3xl font-bold text-ink sm:text-4xl"
+						className="mb-6 flex items-center justify-center gap-2 sm:gap-3 text-center text-2xl font-bold text-ink sm:text-4xl"
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: false, amount: 0.4 }}
 						transition={{ duration: 0.6 }}
 					>
-						Gallery{" "}
+						Gallery
 						<img
 							src="/branding.png"
 							alt="GDG Branding"
-							className="ml-3 inline h-8 w-auto"
+							className="h-6 sm:h-8 w-auto"
 						/>
 					</motion.h2>
 

@@ -27,6 +27,7 @@ export default function BuildWithAi2025Section() {
                 width={130}
                 height={40}
                 className="h-11 w-auto sm:h-12"
+                loading="eager"
               />
               <h2
                 className="font-sans text-[clamp(1.65rem,3.2vw,2.65rem)] font-bold leading-none tracking-tight text-ink"
