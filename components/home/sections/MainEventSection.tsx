@@ -235,8 +235,9 @@ export default function MainEventSection() {
 							viewport={{ once: false, amount: 0.4 }}
 							transition={{ duration: 0.6, delay: 0.2 }}
 						>
-							<div ref={ticketRef} className="p-4 -m-4">
+							<div className="p-4 -m-4">
 								<TicketPlaceholder
+									ref={ticketRef}
 									image={image}
 									bottomText={bottomText}
 									themeColor={themeColor}

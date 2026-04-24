@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import BlackPillButton from "@/components/BlackPillButton";
 import { COLOR_THEMES } from "@/lib/config";
 
 const getThemeHex = (cardClass: string): string => {
@@ -126,25 +125,34 @@ export default function CustomizeTicketForm({
 								aria-label={`Select theme color ${hex}`}
 							/>
 						))}
-						
+
 						{/* Custom Color Option */}
-						<div 
+						<div
 							className={`relative h-8 w-8 rounded-full overflow-hidden shadow-sm transition-all duration-200 ${
 								!THEME_COLORS.includes(themeColor)
 									? "ring-2 ring-ink ring-offset-2 scale-110"
 									: "hover:scale-110 opacity-80 hover:opacity-100"
 							}`}
 							style={
-								THEME_COLORS.includes(themeColor) 
-									? { background: "conic-gradient(from 90deg, #ea4335, #f9ab00, #34a853, #4285f4, #ea4335)" } 
+								THEME_COLORS.includes(themeColor)
+									? {
+											background:
+												"conic-gradient(from 90deg, #ea4335, #f9ab00, #34a853, #4285f4, #ea4335)",
+										}
 									: { backgroundColor: themeColor }
 							}
 							title="Custom Color"
 						>
 							<input
 								type="color"
-								value={!THEME_COLORS.includes(themeColor) ? themeColor : "#ffffff"}
-								onChange={(e) => onThemeColorChange(e.target.value)}
+								value={
+									!THEME_COLORS.includes(themeColor)
+										? themeColor
+										: "#ffffff"
+								}
+								onChange={(e) =>
+									onThemeColorChange(e.target.value)
+								}
 								className="absolute opacity-0 inset-0 w-full h-full cursor-pointer"
 								aria-label="Select custom theme color"
 							/>
@@ -158,16 +166,22 @@ export default function CustomizeTicketForm({
 						Profile Shape
 					</label>
 					<div className="flex items-center gap-4">
-						<span className="text-xs font-medium text-ink/50">Square</span>
+						<span className="text-xs font-medium text-ink/50">
+							Square
+						</span>
 						<input
 							type="range"
 							min="0"
 							max="50"
 							value={imageRadius}
-							onChange={(e) => onImageRadiusChange(Number(e.target.value))}
+							onChange={(e) =>
+								onImageRadiusChange(Number(e.target.value))
+							}
 							className="w-full accent-blue-600 h-2 bg-ink/10 rounded-lg appearance-none cursor-pointer"
 						/>
-						<span className="text-xs font-medium text-ink/50">Circle</span>
+						<span className="text-xs font-medium text-ink/50">
+							Circle
+						</span>
 					</div>
 				</div>
 			</div>
@@ -181,7 +195,9 @@ export default function CustomizeTicketForm({
 					className="group inline-flex w-full items-center justify-center rounded-full bg-black px-6 py-3 font-bold transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-coreBlue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-black"
 				>
 					<span className="text-[0.95rem] text-white group-hover:text-black transition-colors">
-						{isDownloading ? "Generating Ticket..." : "Download Ticket"}
+						{isDownloading
+							? "Generating Ticket..."
+							: "Download Ticket"}
 					</span>
 				</button>
 			</div>
