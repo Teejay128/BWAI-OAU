@@ -29,10 +29,13 @@ export default function MainEventSection() {
 
 	const handleDownload = async () => {
 		if (!ticketRef.current) return;
-		
+
 		setIsDownloading(true);
 		try {
-			const dataUrl = await toPng(ticketRef.current, { cacheBust: true, pixelRatio: 3 });
+			const dataUrl = await toPng(ticketRef.current, {
+				cacheBust: true,
+				pixelRatio: 3,
+			});
 			const link = document.createElement("a");
 			link.download = "bwai-gdg-ticket.png";
 			link.href = dataUrl;
