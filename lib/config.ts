@@ -434,90 +434,90 @@ export type Project = {
 };
 
 export const COMMUNITY_COLORS: Record<string, string> = {
-  "Data Science & ML": "#ccf6c5",
-  "Web & Mobile Dev": "#ff7daf",
-  "Cloud & Cybersecurity": "#c3ecf6",
-  "Game Dev & Design": "#ffe7a5",
-  "The Creative Track": "#f8d8d8",
-  "GDG OAU": "#57caff",
+	"Data Science & ML": "#ccf6c5",
+	"Web & Mobile Dev": "#ff7daf",
+	"Cloud & Cybersecurity": "#c3ecf6",
+	"Game Dev & Design": "#ffe7a5",
+	"The Creative Track": "#f8d8d8",
+	"GDG OAU": "#57caff",
 };
 
 export const TECH_TAG_COLORS: Record<string, string> = {
-  "Gemini API": "#d357ff",
-  "Google ADK": "#db8f5c",
-  "Antigravity": "#5c6ddb",
-  "Vertex AI": "#ff7daf",
-  "Cloud Run": "#5cdb6d",
-  "Bayse API": "#57caff",
+	"Gemini API": "#d357ff",
+	"Google ADK": "#db8f5c",
+	Antigravity: "#5c6ddb",
+	"Vertex AI": "#ff7daf",
+	"Cloud Run": "#5cdb6d",
+	"Bayse API": "#57caff",
 };
 
 export const WHAT_WAS_BUILT_PROJECTS: Project[] = [
-  {
-    id: 1,
-    community: "Data Science & ML",
-    tags: ["Pre-Series"],
-    name: "EcoScan AI",
-    description:
-      "Real-time waste classification using Gemini Vision for university campuses.",
-    techTags: ["Gemini API", "ADK"],
-    demoHref: "#",
-    likes: 24,
-  },
-  {
-    id: 2,
-    community: "Web & Mobile Dev",
-    tags: [],
-    name: "PulseQuest",
-    description:
-      "Gamified mental health tracker powered by Firebase and Google AI Studio.",
-    techTags: ["Gemini API"],
-    demoHref: "#",
-    likes: 56,
-  },
-  {
-    id: 3,
-    community: "Data Science & ML",
-    tags: ["Pre-Series"],
-    name: "LexiLegal",
-    description:
-      "Simplifying Nigerian legal documents for entrepreneurs using LLMs.",
-    techTags: ["Gemini API", "ADK"],
-    demoHref: "#",
-    likes: 102,
-  },
-  {
-    id: 4,
-    community: "Data Science & ML",
-    tags: [],
-    name: "AgriFlow",
-    description:
-      "Predictive irrigation scheduling for small-scale farmers in Oyo State.",
-    techTags: ["ADK"],
-    demoHref: "#",
-    likes: 39,
-  },
-  {
-    id: 5,
-    community: "The Creative Track",
-    tags: [],
-    name: "SonicCanvas",
-    description:
-      "Turning spoken Yoruba poetry into generative digital art sequences.",
-    techTags: ["Gemini API"],
-    demoHref: "#",
-    likes: 88,
-  },
-  {
-    id: 6,
-    community: "Cloud & Cybersecurity",
-    tags: [],
-    name: "SecureNodes",
-    description:
-      "AI-driven threat detection for multi-cloud infrastructure deployments.",
-    techTags: ["ADK"],
-    demoHref: "#",
-    likes: 15,
-  },
+	{
+		id: 1,
+		community: "Data Science & ML",
+		tags: ["Pre-Series"],
+		name: "EcoScan AI",
+		description:
+			"Real-time waste classification using Gemini Vision for university campuses.",
+		techTags: ["Gemini API", "ADK"],
+		demoHref: "#",
+		likes: 24,
+	},
+	{
+		id: 2,
+		community: "Web & Mobile Dev",
+		tags: [],
+		name: "PulseQuest",
+		description:
+			"Gamified mental health tracker powered by Firebase and Google AI Studio.",
+		techTags: ["Gemini API"],
+		demoHref: "#",
+		likes: 56,
+	},
+	{
+		id: 3,
+		community: "Data Science & ML",
+		tags: ["Pre-Series"],
+		name: "LexiLegal",
+		description:
+			"Simplifying Nigerian legal documents for entrepreneurs using LLMs.",
+		techTags: ["Gemini API", "ADK"],
+		demoHref: "#",
+		likes: 102,
+	},
+	{
+		id: 4,
+		community: "Data Science & ML",
+		tags: [],
+		name: "AgriFlow",
+		description:
+			"Predictive irrigation scheduling for small-scale farmers in Oyo State.",
+		techTags: ["ADK"],
+		demoHref: "#",
+		likes: 39,
+	},
+	{
+		id: 5,
+		community: "The Creative Track",
+		tags: [],
+		name: "SonicCanvas",
+		description:
+			"Turning spoken Yoruba poetry into generative digital art sequences.",
+		techTags: ["Gemini API"],
+		demoHref: "#",
+		likes: 88,
+	},
+	{
+		id: 6,
+		community: "Cloud & Cybersecurity",
+		tags: [],
+		name: "SecureNodes",
+		description:
+			"AI-driven threat detection for multi-cloud infrastructure deployments.",
+		techTags: ["ADK"],
+		demoHref: "#",
+		likes: 15,
+	},
 ];
 
 export type Speaker = {
@@ -534,42 +534,42 @@ export const EVENT_SPEAKERS: Speaker[] = [
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "AI Research",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 	{
 		name: "Coming Soon...",
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "Data Science & ML",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 	{
 		name: "Coming Soon...",
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "Mobile & Web Dev",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 	{
 		name: "Coming Soon...",
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "Cloud & Cybersecurity",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 	{
 		name: "Coming Soon...",
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "Game Dev & Design",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 	{
 		name: "Coming Soon...",
 		title: "To Be Announced",
 		organization: "TBA",
 		track: "The Creative Track",
-		photo: "gdg-speaker-avatar.png",
+		photo: "main-event/gdg-speaker-avatar.png",
 	},
 ];
 

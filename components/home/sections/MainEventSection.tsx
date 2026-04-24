@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useRef } from "react";
+import { toPng } from "html-to-image";
 import { motion } from "motion/react";
 import { MdLocationPin } from "react-icons/md";
 
@@ -8,9 +10,40 @@ import SpeakerCard from "@/components/main-event/SpeakerCard";
 import PhotoCarousel from "@/components/main-event/PhotoCarousel";
 import TimelineSchedule from "@/components/main-event/TimelineSchedule";
 import TicketPlaceholder from "@/components/main-event/TicketPlaceholder";
-import { EVENT_DATES, EVENT_SPEAKERS, EVENT_SCHEDULE, EVENT_LOCATION } from "@/lib/config";
+import CustomizeTicketForm from "@/components/main-event/CustomizeTicketForm";
+import {
+	EVENT_DATES,
+	EVENT_SPEAKERS,
+	EVENT_SCHEDULE,
+	EVENT_LOCATION,
+} from "@/lib/config";
 
 export default function MainEventSection() {
+	const [image, setImage] = useState<string | null>(null);
+	const [bottomText, setBottomText] = useState("I'll be at BWAI × GDG OAU");
+	const [imageRadius, setImageRadius] = useState<number>(12);
+	const [themeColor, setThemeColor] = useState("#4285f4");
+
+	const ticketRef = useRef<HTMLDivElement>(null);
+	const [isDownloading, setIsDownloading] = useState(false);
+
+	const handleDownload = async () => {
+		if (!ticketRef.current) return;
+		
+		setIsDownloading(true);
+		try {
+			const dataUrl = await toPng(ticketRef.current, { cacheBust: true, pixelRatio: 3 });
+			const link = document.createElement("a");
+			link.download = "bwai-gdg-ticket.png";
+			link.href = dataUrl;
+			link.click();
+		} catch (err) {
+			console.error("Failed to generate ticket image:", err);
+		} finally {
+			setIsDownloading(false);
+		}
+	};
+
 	return (
 		<motion.section id="main-event" className="w-full overflow-x-hidden">
 			{/* Hero Block */}
@@ -148,6 +181,74 @@ export default function MainEventSection() {
 				</motion.div>
 			</section>
 
+			{/* Customize Ticket Section */}
+			<section className="px-4 py-16 sm:px-6 lg:px-8 bg-surface/50">
+				<div className="mx-auto max-w-6xl">
+					<motion.div
+						className="mb-12 text-center"
+						initial={{ opacity: 0, y: 24 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false, amount: 0.4 }}
+						transition={{ duration: 0.6 }}
+					>
+						<h2 className="flex items-center justify-center gap-2 sm:gap-3 text-2xl font-bold text-ink sm:text-4xl">
+							Customization
+							<img
+								src="/branding.png"
+								alt="GDG Branding"
+								className="h-6 sm:h-8 w-auto"
+							/>
+						</h2>
+						<p className="mt-4 text-ink/70 max-w-2xl mx-auto">
+							Personalize your event ticket with your own photo,
+							custom text, shape, and brand color before
+							downloading it to share.
+						</p>
+					</motion.div>
+
+					<div className="grid gap-12 lg:grid-cols-2 items-start justify-items-center">
+						<motion.div
+							className="w-full flex justify-center"
+							initial={{ opacity: 0, x: -24 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: false, amount: 0.4 }}
+							transition={{ duration: 0.6, delay: 0.1 }}
+						>
+							<CustomizeTicketForm
+								image={image}
+								onImageChange={setImage}
+								bottomText={bottomText}
+								onBottomTextChange={setBottomText}
+								themeColor={themeColor}
+								onThemeColorChange={setThemeColor}
+								imageRadius={imageRadius}
+								onImageRadiusChange={setImageRadius}
+								onDownload={handleDownload}
+								isDownloading={isDownloading}
+							/>
+						</motion.div>
+
+						<motion.div
+							className="w-full flex justify-center"
+							initial={{ opacity: 0, x: 24 }}
+							whileInView={{ opacity: 1, x: 0 }}
+							viewport={{ once: false, amount: 0.4 }}
+							transition={{ duration: 0.6, delay: 0.2 }}
+						>
+							<div className="p-4 -m-4">
+								<TicketPlaceholder
+									ref={ticketRef}
+									image={image}
+									bottomText={bottomText}
+									themeColor={themeColor}
+									imageRadius={imageRadius}
+								/>
+							</div>
+						</motion.div>
+					</div>
+				</div>
+			</section>
+
 			{/* Register CTA */}
 			<section id="register" className="px-4 py-16 sm:px-6 lg:px-8">
 				<div className="mx-auto max-w-4xl text-center">
@@ -164,12 +265,9 @@ export default function MainEventSection() {
 							talks, and networking.
 						</p>
 
-						<TicketPlaceholder />
-
-						{/* The existing button */}
 						<div className="mt-10">
 							<BlackPillButton
-								label="Claim Your Ticket"
+								label="Register Now"
 								href="https://gdg.community.dev/events/details/google-gdg-on-campus-obafemi-awolowo-university-ife-nigeria-presents-build-with-ai-oau-build-shift-scale/"
 							/>
 						</div>

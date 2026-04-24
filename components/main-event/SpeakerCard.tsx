@@ -31,7 +31,7 @@ function SpeakerCard({ index, speaker }: { index: number; speaker: Speaker }) {
 			{/* GDG OAU Logo stuff */}
 			<div className="overflow-hidden mt-2">
 				<img
-					src={"speaker-branding.png"}
+					src={"/main-event/speaker-branding.png"}
 					alt={"Image branding"}
 					className="h-full w-full object-cover"
 				/>
